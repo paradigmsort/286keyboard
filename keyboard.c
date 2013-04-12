@@ -6,6 +6,8 @@
 
 #define CPU_PRESCALE(n)	(CLKPR = 0x80, CLKPR = (n))
 
+#define NUM_COLUMNS 8
+
 #define BIT(iNDEX) (1<<(iNDEX))
 #define BIT_IS_SET(rEG, iNDEX) ((rEG) & BIT(iNDEX))
 #define BIT_IS_CLEAR(rEG, iNDEX) (! BIT_IS_SET(rEG, iNDEX))
@@ -36,6 +38,14 @@ void unselect_rows(void)
 	DDRC &= ~(1<<7); 	//input
 	PORTC &= ~(1<<7); 	// floating
 	_delay_us(30);
+}
+
+void print_row_col(uint8_t row, uint8_t col)
+{
+	print("row:");
+	phex(row);
+	print(" col:");
+	phex(col);
 }
 
 uint8_t detect_row;
@@ -96,13 +106,8 @@ int main(void)
 		select_row();
 		cols = read_columns();
 		unselect_rows();
-
-		if ((cols & (1<<7)) && !(prev_cols&(1<<7))) {
-			print("F9 down\n");
-		}
-		if (!(cols & (1<<7)) && (prev_cols&(1<<7))) {
-			print("F9 up\n");
-		}
+		set_detect_row(7);
+		detect_changes(cols, prev_cols);
 		prev_cols = cols;
 	}
 }
