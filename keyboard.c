@@ -6,6 +6,10 @@
 
 #define CPU_PRESCALE(n)	(CLKPR = 0x80, CLKPR = (n))
 
+#define BIT(iNDEX) (1<<(iNDEX))
+#define BIT_IS_SET(rEG, iNDEX) ((rEG) & BIT(iNDEX))
+#define BIT_IS_CLEAR(rEG, iNDEX) (! BIT_IS_SET(rEG, iNDEX))
+
 // input columns are on pins D
 void init_columns(void)
 {
