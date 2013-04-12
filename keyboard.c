@@ -34,6 +34,39 @@ void unselect_rows(void)
 	_delay_us(30);
 }
 
+uint8_t detect_row;
+void set_detect_row(uint8_t row)
+{
+	detect_row = row;
+}
+
+void on_keydown(uint8_t col)
+{
+	print("keydown");
+	print_row_col(detect_row, col);
+	print("\n");
+}
+
+void on_keyup(uint8_t col)
+{
+	print("keyup  ");
+	print_row_col(detect_row, col);
+	print("\n");
+}
+
+void detect_changes(uint8_t cols, uint8_t prev_cols)
+{
+	uint8_t i;
+	for (i=0; i< NUM_COLUMNS; i++) {
+		if (BIT_IS_SET(cols,i) && BIT_IS_CLEAR(prev_cols,i)) {
+			on_keydown(i);
+		}
+		if (BIT_IS_CLEAR(cols,i) && BIT_IS_SET(prev_cols,i)) {
+			on_keyup(i);
+		}
+	}
+}
+
 int main(void)
 {
 	// set for 16 MHz clock
