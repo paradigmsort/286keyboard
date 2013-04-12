@@ -21,16 +21,16 @@ uint8_t read_columns(void)
 // for now, only one row
 void select_row(void)
 {
-	DDRF |= (1<<0); 	// output
-	PORTF &= ~(1<<0); 	// low
+	DDRC |= (1<<7); 	// output
+	PORTC &= ~(1<<7); 	// low
 	_delay_us(30);
 }
 
 void unselect_rows(void)
 {
 	// switch to high-impedence ie floating input
-	DDRF &= ~(1<<0); 	//input
-	PORTF &= ~(1<<0); 	// floating
+	DDRC &= ~(1<<7); 	//input
+	PORTC &= ~(1<<7); 	// floating
 	_delay_us(30);
 }
 
@@ -60,10 +60,10 @@ int main(void)
 		cols = read_columns();
 		unselect_rows();
 
-		if ((cols & 1) && !(prev_cols&1)) {
+		if ((cols & (1<<7)) && !(prev_cols&(1<<7))) {
 			print("F9 down\n");
 		}
-		if (!(cols&1) && (prev_cols&1)) {
+		if (!(cols & (1<<7)) && (prev_cols&(1<<7))) {
 			print("F9 up\n");
 		}
 		prev_cols = cols;
