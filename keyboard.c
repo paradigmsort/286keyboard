@@ -7,6 +7,7 @@
 #define CPU_PRESCALE(n)	(CLKPR = 0x80, CLKPR = (n))
 
 #define NUM_COLUMNS 8
+#define NUM_ROWS 2
 
 #define BIT(iNDEX) (1<<(iNDEX))
 #define BIT_IS_SET(rEG, iNDEX) ((rEG) & BIT(iNDEX))
@@ -25,10 +26,10 @@ uint8_t read_columns(void)
 }
 
 // for now, only one row
-void select_row(void)
+void select_row(uint8_t n)
 {
-	DDRC |= (1<<7); 	// output
-	PORTC &= ~(1<<7); 	// low
+	DDRC |= (1<<n); 	// output
+	PORTC &= ~(1<<n); 	// low
 	_delay_us(30);
 }
 
@@ -37,6 +38,8 @@ void unselect_rows(void)
 	// switch to high-impedence ie floating input
 	DDRC &= ~(1<<7); 	//input
 	PORTC &= ~(1<<7); 	// floating
+	DDRC &= ~(1<<5); 	//input
+	PORTC &= ~(1<<5); 	// floating
 	_delay_us(30);
 }
 
@@ -100,14 +103,23 @@ int main(void)
 	// and do whatever it does to actually be ready for input
 	_delay_ms(1000);
 
-	uint8_t prev_cols = 0;
-	uint8_t cols = 0;
+	uint8_t indices[NUM_ROWS] = {7, 5}; 
+	uint8_t prev_cols[NUM_ROWS];
+	uint8_t cols[NUM_ROWS];
+
+	uint8_t i;
+	for(i=0; i < NUM_ROWS; i++) {
+		cols[i] = 0;
+		prev_cols[i] = 0;
+	}
 	while (1) {
-		select_row();
-		cols = read_columns();
-		unselect_rows();
-		set_detect_row(7);
-		detect_changes(cols, prev_cols);
-		prev_cols = cols;
+		for (i=0; i< NUM_ROWS; i++) {
+			select_row(indices[i]);
+			cols[i] = read_columns();
+			unselect_rows();
+			set_detect_row(indices[i]);
+			detect_changes(cols[i], prev_cols[i]);
+			prev_cols[i] = cols[i];
+		}
 	}
 }
