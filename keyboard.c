@@ -13,6 +13,30 @@
 #define BIT_IS_SET(rEG, iNDEX) ((rEG) & BIT(iNDEX))
 #define BIT_IS_CLEAR(rEG, iNDEX) (! BIT_IS_SET(rEG, iNDEX))
 
+#define KEY_NONE 0
+
+#define MAX_NAME_LENGTH 16
+
+#define KEYS(oP) \
+	{oP(F8),		oP(F7),	oP(F6),	oP(HOME),	oP(SCROLL_LOCK),	oP(NUM_LOCK),		oP(F10),		oP(F9)}, \
+	{oP(F1),		oP(F2),		oP(F3),			oP(F4), 			oP(F5), 	oP(NONE),	oP(SPACE),	oP(CAPS_LOCK)},\
+	{oP(0), 		oP(MINUS),	oP(EQUAL),		oP(BACKSPACE),		oP(TAB),	oP(7),		oP(8),		oP(9)},\
+	{oP(2), 		oP(3),		oP(4),			oP(5),				oP(6),		oP(NONE),	oP(ESC),	oP(0)},\
+	{oP(R), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(RIGHT_BRACE),oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(NONE), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(NONE), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(H), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(COMMA), 	oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(BACKSLASH), oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(LEFT), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(DELETE), 	oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)}
+#define CODE(k) KEY_##k
+#define NAME(k) #k
+
+
+static char name_matrix[NUM_ROWS][NUM_COLUMNS][MAX_NAME_LENGTH] PROGMEM = { KEYS(NAME) };
+
 // input columns are on pins D
 void init_columns(void)
 {
@@ -68,14 +92,18 @@ void set_detect_row(uint8_t row)
 
 void on_keydown(uint8_t col)
 {
-	print("keydown");
+	print("keydown ");
+	print_P(name_matrix[detect_row][col]);
+	print(" ");
 	print_row_col(detect_row, col);
 	print("\n");
 }
 
 void on_keyup(uint8_t col)
 {
-	print("keyup  ");
+	print("keyup   ");
+	print_P(name_matrix[detect_row][col]);
+	print(" ");
 	print_row_col(detect_row, col);
 	print("\n");
 }
@@ -126,7 +154,7 @@ int main(void)
 	}
 	while (1) {
 		for (i=0; i< NUM_ROWS; i++) {
-			select_row(indices[i]);
+			select_row(i);
 			cols[i] = read_columns();
 			unselect_rows();
 			set_detect_row(indices[i]);
