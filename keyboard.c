@@ -24,7 +24,7 @@
 	{oP(NONE), 		oP(ESC),	oP(NONE),	oP(6),		oP(5),				oP(4),			oP(3),		oP(2)},\
 	{oP(E), 		oP(W),		oP(Q),		oP(I),		oP(U),				oP(Y),			oP(T),		oP(R)},\
 	{oP(LEFT_BRACE),oP(P),		oP(O),		oP(S),		oP(A),				oP(NONE),		oP(ENTER),	oP(RIGHT_BRACE)},\
-	{oP(NONE), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(NONE), 		oP(NONE),	oP(NONE),	oP(NONE),	oP(NONE),			oP(CTRL),		oP(NONE),	oP(NONE)},\
 	{oP(NONE), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
 	{oP(H), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
 	{oP(COMMA), 	oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
