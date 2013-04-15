@@ -18,10 +18,10 @@
 #define MAX_NAME_LENGTH 16
 
 #define KEYS(oP) \
-	{oP(F8),		oP(F7),		oP(F6),		oP(HOME),	oP(SCROLL_LOCK),	oP(NUM_LOCK),	oP(F10),oP(F9)}, \
-	{oP(CAPS_LOCK),	oP(SPACE),	oP(NONE),	oP(F5), 	oP(F4), 			oP(F3),			oP(F2),	oP(F1)},\
-	{oP(0), 		oP(MINUS),	oP(EQUAL),		oP(BACKSPACE),		oP(TAB),	oP(7),		oP(8),		oP(9)},\
-	{oP(2), 		oP(3),		oP(4),			oP(5),				oP(6),		oP(NONE),	oP(ESC),	oP(0)},\
+	{oP(F8),		oP(F7),		oP(F6),		oP(HOME),	oP(SCROLL_LOCK),	oP(NUM_LOCK),	oP(F10),	oP(F9)}, \
+	{oP(CAPS_LOCK),	oP(SPACE),	oP(NONE),	oP(F5), 	oP(F4), 			oP(F3),			oP(F2),		oP(F1)},\
+	{oP(9), 		oP(8),		oP(7),		oP(TAB),	oP(BACKSPACE),		oP(EQUAL),		oP(MINUS),	oP(0)},\
+	{oP(NONE), 		oP(ESC),	oP(NONE),	oP(6),		oP(5),				oP(4),			oP(3),		oP(2)},\
 	{oP(R), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
 	{oP(RIGHT_BRACE),oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
 	{oP(NONE), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
