@@ -4,6 +4,8 @@
 #include "usb_keyboard_debug.h"
 #include "print.h"
 
+//#define SLOW_MODE
+
 #define CPU_PRESCALE(n)	(CLKPR = 0x80, CLKPR = (n))
 
 #define NUM_COLUMNS 8
@@ -18,11 +20,23 @@ void init_columns(void)
 {
 	DDRD = 0x00; // configure as input (0)
 	PORTD = 0xFF; // configure as pull-up (1)
+	DDRB = 0x00;
+	PORTB = 0xFF;
 }
 
 uint8_t read_columns(void)
 {
-	return ~PIND; // active-low
+	uint8_t columns = ((~PIND) & 0xBF); // all columns except 6 are on D
+	columns |= (PINB & 1) ? 0x00 : 0x40; // column 6 is B0
+#ifdef SLOW_MODE
+	print("pind:");
+	phex(PIND);
+	print("\n");
+	print("pinb:");
+	phex(PINB);
+	print("\n");
+#endif
+	return columns;
 }
 
 void select_row(uint8_t n)
@@ -35,7 +49,7 @@ void select_row(uint8_t n)
 		DDRF |= (1<<n);
 		PORTF &= ~(1<<n);
 	}
-	_delay_us(100);
+	_delay_us(30);
 }
 
 void unselect_rows(void)
@@ -98,6 +112,9 @@ int main(void)
 	init_columns();
 	unselect_rows();
 
+	DDRD |= (1<<6); // led is output
+	PORTD &= ~(1<<6); // led is off
+
 	// Initialize the USB, and then wait for the host to set configuration.
 	// If the Teensy is powered without a PC connected to the USB port,
 	// this will wait forever.
@@ -125,6 +142,14 @@ int main(void)
 			set_detect_row(indices[i]);
 			detect_changes(cols[i], prev_cols[i]);
 			prev_cols[i] = cols[i];
+#ifdef SLOW_MODE
+			print("row:");
+			phex(i);
+			print(" cols:");
+			phex(cols[i]);
+			print("\n");
+			_delay_ms(2000);
+#endif
 		}
 	}
 }
