@@ -22,8 +22,8 @@
 	{oP(CAPS_LOCK),	oP(SPACE),	oP(NONE),	oP(F5), 	oP(F4), 			oP(F3),			oP(F2),		oP(F1)},\
 	{oP(9), 		oP(8),		oP(7),		oP(TAB),	oP(BACKSPACE),		oP(EQUAL),		oP(MINUS),	oP(0)},\
 	{oP(NONE), 		oP(ESC),	oP(NONE),	oP(6),		oP(5),				oP(4),			oP(3),		oP(2)},\
-	{oP(R), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
-	{oP(RIGHT_BRACE),oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(E), 		oP(W),		oP(Q),		oP(I),		oP(U),				oP(Y),			oP(T),		oP(R)},\
+	{oP(LEFT_BRACE),oP(P),		oP(O),		oP(S),		oP(A),				oP(NONE),		oP(ENTER),	oP(RIGHT_BRACE)},\
 	{oP(NONE), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
 	{oP(NONE), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
 	{oP(H), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
