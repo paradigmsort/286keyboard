@@ -14,6 +14,7 @@
 #define BIT_IS_CLEAR(rEG, iNDEX) (! BIT_IS_SET(rEG, iNDEX))
 
 #define KEY_NONE 0
+#define KEY_SYS_REQ KEY_PAUSE
 
 #define MAX_NAME_LENGTH 16
 
@@ -21,14 +22,14 @@
 	{oP(F8),		oP(F7),		oP(F6),		oP(HOME),	oP(SCROLL_LOCK),	oP(NUM_LOCK),	oP(F10),	oP(F9)}, \
 	{oP(CAPS_LOCK),	oP(SPACE),	oP(NONE),	oP(F5), 	oP(F4), 			oP(F3),			oP(F2),		oP(F1)},\
 	{oP(9), 		oP(8),		oP(7),		oP(TAB),	oP(BACKSPACE),		oP(EQUAL),		oP(MINUS),	oP(0)},\
-	{oP(NONE), 		oP(ESC),	oP(NONE),	oP(6),		oP(5),				oP(4),			oP(3),		oP(2)},\
+	{oP(1), 		oP(ESC),	oP(NONE),	oP(6),		oP(5),				oP(4),			oP(3),		oP(2)},\
 	{oP(E), 		oP(W),		oP(Q),		oP(I),		oP(U),				oP(Y),			oP(T),		oP(R)},\
 	{oP(LEFT_BRACE),oP(P),		oP(O),		oP(S),		oP(A),				oP(NONE),		oP(ENTER),	oP(RIGHT_BRACE)},\
 	{oP(NONE), 		oP(NONE),	oP(NONE),	oP(NONE),	oP(NONE),			oP(CTRL),		oP(NONE),	oP(NONE)},\
 	{oP(NONE), 		oP(NONE),	oP(ALT),	oP(NONE),	oP(NONE),			oP(NONE),		oP(NONE),	oP(NONE)},\
-	{oP(H), 		oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
-	{oP(COMMA), 	oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
-	{oP(BACKSLASH), oP(F10),	oP(NUM_LOCK),	oP(SCROLL_LOCK),	oP(HOME),	oP(F6),		oP(F7),		oP(F8)},\
+	{oP(G), 		oP(F),		oP(D),		oP(SEMICOLON),oP(L),			oP(K),			oP(J),		oP(H)},\
+	{oP(M), 		oP(N),		oP(B),		oP(SYS_REQ),oP(RIGHT_SHIFT),	oP(SLASH),		oP(PERIOD),	oP(COMMA)},\
+	{oP(LEFT_SHIFT),oP(TILDE),	oP(QUOTE),	oP(V),		oP(C),				oP(X),			oP(Z),		oP(BACKSLASH)},\
 	{oP(PRINTSCREEN),oP(PAGE_UP),oP(UP),	oP(END),	oP(NONE),			oP(RIGHT),		oP(NONE),	oP(LEFT)},\
 	{oP(INSERT), 	oP(PAGE_DOWN),oP(DOWN),	oP(NONE),	oP(NONE),			oP(NONE),		oP(NONE),	oP(DELETE)}
 #define CODE(k) KEY_##k
