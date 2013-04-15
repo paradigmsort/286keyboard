@@ -4,8 +4,6 @@
 #include "usb_keyboard_debug.h"
 #include "print.h"
 
-//#define SLOW_MODE
-
 #define CPU_PRESCALE(n)	(CLKPR = 0x80, CLKPR = (n))
 
 #define NUM_COLUMNS 8
@@ -28,14 +26,6 @@ uint8_t read_columns(void)
 {
 	uint8_t columns = ((~PIND) & 0xBF); // all columns except 6 are on D
 	columns |= (PINB & 1) ? 0x00 : 0x40; // column 6 is B0
-#ifdef SLOW_MODE
-	print("pind:");
-	phex(PIND);
-	print("\n");
-	print("pinb:");
-	phex(PINB);
-	print("\n");
-#endif
 	return columns;
 }
 
@@ -142,14 +132,6 @@ int main(void)
 			set_detect_row(indices[i]);
 			detect_changes(cols[i], prev_cols[i]);
 			prev_cols[i] = cols[i];
-#ifdef SLOW_MODE
-			print("row:");
-			phex(i);
-			print(" cols:");
-			phex(cols[i]);
-			print("\n");
-			_delay_ms(2000);
-#endif
 		}
 	}
 }
