@@ -37,6 +37,7 @@
 
 
 static char name_matrix[NUM_ROWS][NUM_COLUMNS][MAX_NAME_LENGTH] PROGMEM = { KEYS(NAME) };
+uint8_t code_matrix[NUM_ROWS][NUM_COLUMNS] = { KEYS(CODE) };
 
 // input columns are on pins D
 void init_columns(void)
@@ -98,6 +99,7 @@ void on_keydown(uint8_t col)
 	print(" ");
 	print_row_col(detect_row, col);
 	print("\n");
+	usb_keyboard_press(code_matrix[detect_row][col], 0x00);
 }
 
 void on_keyup(uint8_t col)
