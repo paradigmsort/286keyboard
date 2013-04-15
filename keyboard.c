@@ -154,10 +154,10 @@ int main(void)
 	}
 	while (1) {
 		for (i=0; i< NUM_ROWS; i++) {
-			select_row(i);
+			select_row(indices[i]);
 			cols[i] = read_columns();
 			unselect_rows();
-			set_detect_row(indices[i]);
+			set_detect_row(i);
 			detect_changes(cols[i], prev_cols[i]);
 			prev_cols[i] = cols[i];
 		}
