@@ -7,8 +7,14 @@
 #define CPU_PRESCALE(n)	(CLKPR = 0x80, CLKPR = (n))
 
 #define NUM_COLUMNS 8
-#define NUM_ROWS 13
 #define NUM_MODIFIER_KEYS 4
+
+#define ROWS(oP)  \
+	oP(7) oP(6) oP(5) oP(4) oP(3) oP(2) oP(1) oP(0) oP(15) oP(14) oP(13) oP(12) oP(11)
+#define INDICES(row) row,
+#define ZERO(row) 0,
+#define NUM(row) 1 +
+#define NUM_ROWS (ROWS(NUM) 0)
 
 #define BIT(iNDEX) (1<<(iNDEX))
 #define BIT_IS_SET(rEG, iNDEX) ((rEG) & BIT(iNDEX))
@@ -194,15 +200,11 @@ int main(void)
 	// and do whatever it does to actually be ready for input
 	_delay_ms(1000);
 
-	uint8_t indices[NUM_ROWS] = {7, 6, 5, 4, 3, 2 ,1, 0, 15, 14, 13, 12, 11}; 
-	uint8_t prev_cols[NUM_ROWS];
-	uint8_t cols[NUM_ROWS];
+	uint8_t indices[NUM_ROWS] 	= { ROWS(INDICES) }; 
+	uint8_t prev_cols[NUM_ROWS] = { ROWS(ZERO) };
+	uint8_t cols[NUM_ROWS] 		= { ROWS(ZERO) };
 
 	uint8_t i;
-	for(i=0; i < NUM_ROWS; i++) {
-		cols[i] = 0;
-		prev_cols[i] = 0;
-	}
 	while (1) {
 		for (i=0; i< NUM_ROWS; i++) {
 			select_row(indices[i]);
