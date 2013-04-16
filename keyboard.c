@@ -96,12 +96,6 @@ void print_row_col(uint8_t row, uint8_t col)
 	phex(col);
 }
 
-uint8_t detect_row;
-void set_detect_row(uint8_t row)
-{
-	detect_row = row;
-}
-
 #define MAX_KEYS 6
 uint8_t num_keys_down = 0;
 void add_key(uint8_t code)
@@ -126,6 +120,12 @@ void remove_key(uint8_t code)
 			break;
 		}
 	}
+}
+
+uint8_t detect_row;
+void set_detect_row(uint8_t row)
+{
+	detect_row = row;
 }
 
 void on_keydown(uint8_t col)
