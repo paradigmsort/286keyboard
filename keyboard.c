@@ -102,7 +102,30 @@ void set_detect_row(uint8_t row)
 	detect_row = row;
 }
 
-uint8_t modifiers;
+#define MAX_KEYS 6
+uint8_t num_keys_down = 0;
+void add_key(uint8_t code)
+{
+	uint8_t i;
+	for (i=0; i<MAX_KEYS; i++) {
+		if (keyboard_keys[i] == 0) {
+			keyboard_keys[i] = code;
+			num_keys_down++;
+		}
+	}
+}
+
+void remove_key(uint8_t code)
+{
+	uint8_t i;
+	for (i=0; i<MAX_KEYS; i++) {
+		if (keyboard_keys[i] == code) {
+			keyboard_keys[i] = 0;
+			num_keys_down--;
+		}
+	}
+}
+
 void on_keydown(uint8_t col)
 {
 	print("keydown ");
@@ -110,10 +133,11 @@ void on_keydown(uint8_t col)
 	print("\n");
 	uint8_t code = code_matrix[detect_row][col];
 	if (code & KEY_MODIFIER_BIT) {
-		modifiers |= modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
+		keyboard_modifier_keys |= modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
 	} else {
-		usb_keyboard_press(code_matrix[detect_row][col], modifiers);
+		add_key(code);
 	}
+	usb_keyboard_send();
 }
 
 void on_keyup(uint8_t col)
@@ -123,8 +147,11 @@ void on_keyup(uint8_t col)
 	print("\n");
 	uint8_t code = code_matrix[detect_row][col];
 	if (code & KEY_MODIFIER_BIT) {
-		modifiers &= ~ modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
+		keyboard_modifier_keys &= ~ modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
+	} else {
+		remove_key(code);
 	}
+	usb_keyboard_send();
 }
 
 void detect_changes(uint8_t cols, uint8_t prev_cols)
