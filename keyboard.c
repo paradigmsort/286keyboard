@@ -8,6 +8,7 @@
 
 #define NUM_COLUMNS 8
 #define NUM_ROWS 13
+#define NUM_MODIFIER_KEYS 4
 
 #define BIT(iNDEX) (1<<(iNDEX))
 #define BIT_IS_SET(rEG, iNDEX) ((rEG) & BIT(iNDEX))
@@ -19,25 +20,32 @@
 #define MAX_NAME_LENGTH 16
 
 #define KEYS(oP) \
-	{oP(F8),		oP(F7),		oP(F6),		oP(HOME),	oP(SCROLL_LOCK),	oP(NUM_LOCK),	oP(F10),	oP(F9)}, \
-	{oP(CAPS_LOCK),	oP(SPACE),	oP(NONE),	oP(F5), 	oP(F4), 			oP(F3),			oP(F2),		oP(F1)},\
-	{oP(9), 		oP(8),		oP(7),		oP(TAB),	oP(BACKSPACE),		oP(EQUAL),		oP(MINUS),	oP(0)},\
-	{oP(1), 		oP(ESC),	oP(NONE),	oP(6),		oP(5),				oP(4),			oP(3),		oP(2)},\
-	{oP(E), 		oP(W),		oP(Q),		oP(I),		oP(U),				oP(Y),			oP(T),		oP(R)},\
-	{oP(LEFT_BRACE),oP(P),		oP(O),		oP(S),		oP(A),				oP(NONE),		oP(ENTER),	oP(RIGHT_BRACE)},\
-	{oP(NONE), 		oP(NONE),	oP(NONE),	oP(NONE),	oP(NONE),			oP(CTRL),		oP(NONE),	oP(NONE)},\
-	{oP(NONE), 		oP(NONE),	oP(ALT),	oP(NONE),	oP(NONE),			oP(NONE),		oP(NONE),	oP(NONE)},\
-	{oP(G), 		oP(F),		oP(D),		oP(SEMICOLON),oP(L),			oP(K),			oP(J),		oP(H)},\
-	{oP(M), 		oP(N),		oP(B),		oP(SYS_REQ),oP(RIGHT_SHIFT),	oP(SLASH),		oP(PERIOD),	oP(COMMA)},\
-	{oP(LEFT_SHIFT),oP(TILDE),	oP(QUOTE),	oP(V),		oP(C),				oP(X),			oP(Z),		oP(BACKSLASH)},\
-	{oP(PRINTSCREEN),oP(PAGE_UP),oP(UP),	oP(END),	oP(NONE),			oP(RIGHT),		oP(NONE),	oP(LEFT)},\
-	{oP(INSERT), 	oP(PAGE_DOWN),oP(DOWN),	oP(NONE),	oP(NONE),			oP(NONE),		oP(NONE),	oP(DELETE)}
+	{oP(F8),			oP(F7),		oP(F6),		oP(HOME),	oP(SCROLL_LOCK),	oP(NUM_LOCK),	oP(F10),	oP(F9)}, \
+	{oP(CAPS_LOCK),		oP(SPACE),	oP(NONE),	oP(F5), 	oP(F4), 			oP(F3),			oP(F2),		oP(F1)},\
+	{oP(9), 			oP(8),		oP(7),		oP(TAB),	oP(BACKSPACE),		oP(EQUAL),		oP(MINUS),	oP(0)},\
+	{oP(1), 			oP(ESC),	oP(NONE),	oP(6),		oP(5),				oP(4),			oP(3),		oP(2)},\
+	{oP(E), 			oP(W),		oP(Q),		oP(I),		oP(U),				oP(Y),			oP(T),		oP(R)},\
+	{oP(LEFT_BRACE),	oP(P),		oP(O),		oP(S),		oP(A),				oP(NONE),		oP(ENTER),	oP(RIGHT_BRACE)},\
+	{oP(NONE), 			oP(NONE),	oP(NONE),	oP(NONE),	oP(NONE),			oP(MOD_CTRL),	oP(NONE),	oP(NONE)},\
+	{oP(NONE), 			oP(NONE),	oP(MOD_ALT),oP(NONE),	oP(NONE),			oP(NONE),		oP(NONE),	oP(NONE)},\
+	{oP(G), 			oP(F),		oP(D),		oP(SEMICOLON),oP(L),			oP(K),			oP(J),		oP(H)},\
+	{oP(M), 			oP(N),		oP(B),		oP(SYS_REQ),oP(MOD_RIGHT_SHIFT),oP(SLASH),		oP(PERIOD),	oP(COMMA)},\
+	{oP(MOD_LEFT_SHIFT),oP(TILDE),	oP(QUOTE),	oP(V),		oP(C),				oP(X),			oP(Z),		oP(BACKSLASH)},\
+	{oP(PRINTSCREEN),	oP(PAGE_UP),oP(UP),		oP(END),	oP(NONE),			oP(RIGHT),		oP(NONE),	oP(LEFT)},\
+	{oP(INSERT), 		oP(PAGE_DOWN),oP(DOWN),	oP(NONE),	oP(NONE),			oP(NONE),		oP(NONE),	oP(DELETE)}
 #define CODE(k) KEY_##k
 #define NAME(k) #k
 
+#define KEY_MODIFIER_BIT 	(1<<7)
+#define KEY_MODIFIER_INDEX_MASK (KEY_MODIFIER_BIT - 1)
+#define KEY_MOD_LEFT_SHIFT  (KEY_MODIFIER_BIT | 0)
+#define KEY_MOD_RIGHT_SHIFT (KEY_MODIFIER_BIT | 1)
+#define KEY_MOD_CTRL 		(KEY_MODIFIER_BIT | 2)
+#define KEY_MOD_ALT 		(KEY_MODIFIER_BIT | 3)
 
 static char name_matrix[NUM_ROWS][NUM_COLUMNS][MAX_NAME_LENGTH] PROGMEM = { KEYS(NAME) };
 uint8_t code_matrix[NUM_ROWS][NUM_COLUMNS] = { KEYS(CODE) };
+uint8_t modifier_codes[NUM_MODIFIER_KEYS] = { KEY_LEFT_SHIFT, KEY_RIGHT_SHIFT, KEY_CTRL, KEY_ALT };
 
 // input columns are on pins D
 void init_columns(void)
@@ -80,6 +88,8 @@ void unselect_rows(void)
 
 void print_row_col(uint8_t row, uint8_t col)
 {
+	print_P(name_matrix[row][col]);
+	print(" ");
 	print("row:");
 	phex(row);
 	print(" col:");
@@ -92,23 +102,29 @@ void set_detect_row(uint8_t row)
 	detect_row = row;
 }
 
+uint8_t modifiers;
 void on_keydown(uint8_t col)
 {
 	print("keydown ");
-	print_P(name_matrix[detect_row][col]);
-	print(" ");
 	print_row_col(detect_row, col);
 	print("\n");
-	usb_keyboard_press(code_matrix[detect_row][col], 0x00);
+	uint8_t code = code_matrix[detect_row][col];
+	if (code & KEY_MODIFIER_BIT) {
+		modifiers |= modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
+	} else {
+		usb_keyboard_press(code_matrix[detect_row][col], modifiers);
+	}
 }
 
 void on_keyup(uint8_t col)
 {
 	print("keyup   ");
-	print_P(name_matrix[detect_row][col]);
-	print(" ");
 	print_row_col(detect_row, col);
 	print("\n");
+	uint8_t code = code_matrix[detect_row][col];
+	if (code & KEY_MODIFIER_BIT) {
+		modifiers &= ~ modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
+	}
 }
 
 void detect_changes(uint8_t cols, uint8_t prev_cols)
