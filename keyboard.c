@@ -160,11 +160,14 @@ void detect_changes(uint8_t cols, uint8_t prev_cols)
 {
 	uint8_t i;
 	for (i=0; i< NUM_COLUMNS; i++) {
-		if (BIT_IS_SET(cols,i) && BIT_IS_CLEAR(prev_cols,i)) {
-			on_keydown(i);
-		}
 		if (BIT_IS_CLEAR(cols,i) && BIT_IS_SET(prev_cols,i)) {
 			on_keyup(i);
+		}
+	}
+	if (num_keys_down >= 2) return;
+	for (i=0; i< NUM_COLUMNS; i++) {
+		if (BIT_IS_SET(cols,i) && BIT_IS_CLEAR(prev_cols,i)) {
+			on_keydown(i);
 		}
 	}
 }
