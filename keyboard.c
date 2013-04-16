@@ -111,6 +111,7 @@ void add_key(uint8_t code)
 		if (keyboard_keys[i] == 0) {
 			keyboard_keys[i] = code;
 			num_keys_down++;
+			break;
 		}
 	}
 }
@@ -122,6 +123,7 @@ void remove_key(uint8_t code)
 		if (keyboard_keys[i] == code) {
 			keyboard_keys[i] = 0;
 			num_keys_down--;
+			break;
 		}
 	}
 }
