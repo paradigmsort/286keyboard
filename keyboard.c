@@ -202,17 +202,16 @@ int main(void)
 
 	uint8_t indices[NUM_ROWS] 	= { ROWS(INDICES) }; 
 	uint8_t prev_cols[NUM_ROWS] = { ROWS(ZERO) };
-	uint8_t cols[NUM_ROWS] 		= { ROWS(ZERO) };
 
 	uint8_t i;
 	while (1) {
 		for (i=0; i< NUM_ROWS; i++) {
 			select_row(indices[i]);
-			cols[i] = read_columns();
+			uint8_t cols = read_columns();
 			unselect_rows();
 			set_detect_row(i);
-			detect_changes(cols[i], prev_cols[i]);
-			prev_cols[i] = cols[i];
+			detect_changes(cols, prev_cols[i]);
+			prev_cols[i] = cols;
 		}
 	}
 }
