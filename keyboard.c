@@ -127,6 +127,36 @@ void remove_key(uint8_t code)
 		}
 	}
 }
+/* Log mode. Saves all sequences sent to PC to buffer for later repeat */
+#define MAX_LOG_LENGTH 1000
+struct { uint8_t keyboard_modifier_keys; uint8_t keyboard_keys[MAX_KEYS]; } keyboard_log[MAX_LOG_LENGTH];
+uint8_t num_logged;
+
+void log(void)
+{
+	if (num_logged < MAX_LOG_LENGTH) {
+		uint8_t i;
+		for(i=0;i<MAX_KEYS;i++) {
+			keyboard_log[num_logged].keyboard_keys[i] = keyboard_keys[i];
+		}
+		keyboard_log[num_logged].keyboard_modifier_keys = keyboard_modifier_keys;
+		num_logged++;
+	}
+}
+
+void dump(void)
+{
+	uint8_t i;
+	for (i=0; i<num_logged; i++) {
+		uint8_t j;
+		for (j=0; j<MAX_KEYS; j++) {
+			keyboard_keys[j] = keyboard_log[i].keyboard_keys[j];
+		}
+		keyboard_modifier_keys = keyboard_log[i].keyboard_modifier_keys;
+		usb_keyboard_send();
+	}
+	num_logged = 0;
+}
 
 uint8_t detect_row;
 void set_detect_row(uint8_t row)
@@ -142,10 +172,13 @@ void on_keydown(uint8_t col)
 	uint8_t code = code_matrix[detect_row][col];
 	if (code & KEY_MODIFIER_BIT) {
 		keyboard_modifier_keys |= modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
+	} else if ( code == KEY_SYS_REQ) {
+		dump();
 	} else {
 		add_key(code);
 	}
 	usb_keyboard_send();
+	log();
 }
 
 void on_keyup(uint8_t col)
@@ -160,6 +193,7 @@ void on_keyup(uint8_t col)
 		remove_key(code);
 	}
 	usb_keyboard_send();
+	log();
 }
 
 void detect_changes(uint8_t cols, uint8_t prev_cols)
