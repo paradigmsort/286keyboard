@@ -139,6 +139,28 @@ keys_state key_sequence[NUM_SEQUENCES][MAX_SEQUENCE_LENGTH];
 uint8_t sequence_length[NUM_SEQUENCES];
 uint8_t active_sequence;
 uint8_t program = 0;
+uint8_t handle_program(uint8_t code)
+{
+	if ( program ) {
+		switch(code) {
+			case KEY_1:
+			case KEY_2:
+			case KEY_3:
+			case KEY_4:
+			case KEY_5:
+			case KEY_6:
+			case KEY_7:
+			case KEY_8:
+			case KEY_9:
+				active_sequence = code - KEY_1 + 1;
+				return 1;
+			default:
+				program = 0;
+				break;
+		}
+	}
+	return 0;
+}
 
 /* Log mode. Saves all sequences sent to PC to buffer for later repeat */
 #define MAX_LOG_LENGTH 100
@@ -200,7 +222,9 @@ void on_keydown(uint8_t col)
 	print_row_col(detect_row, col);
 	print("\n");
 	uint8_t code = code_matrix[detect_row][col];
-	if ( sys_req ) {
+	if ( handle_program(code) ) {
+		return;
+	} else if ( sys_req ) {
 		handle_sys_req(code);
 	} else if (code & KEY_MODIFIER_BIT) {
 		keyboard_modifier_keys |= modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
