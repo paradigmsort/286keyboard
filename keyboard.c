@@ -127,6 +127,7 @@ void remove_key(uint8_t code)
 		}
 	}
 }
+
 /* Log mode. Saves all sequences sent to PC to buffer for later repeat */
 #define MAX_LOG_LENGTH 1000
 struct { uint8_t keyboard_modifier_keys; uint8_t keyboard_keys[MAX_KEYS]; } keyboard_log[MAX_LOG_LENGTH];
@@ -144,7 +145,7 @@ void log(void)
 	}
 }
 
-void dump(void)
+void dump_log(void)
 {
 	uint8_t i;
 	for (i=0; i<num_logged; i++) {
@@ -155,7 +156,24 @@ void dump(void)
 		keyboard_modifier_keys = keyboard_log[i].keyboard_modifier_keys;
 		usb_keyboard_send();
 	}
+}
+
+void reset_log(void)
+{
 	num_logged = 0;
+}
+
+uint8_t sys_req = 0;
+void handle_sys_req(uint8_t code)
+{
+	switch (code) {
+		case KEY_D:
+			dump_log();
+			break;
+		case KEY_R:
+			reset_log();
+			break;
+	}
 }
 
 uint8_t detect_row;
@@ -170,10 +188,12 @@ void on_keydown(uint8_t col)
 	print_row_col(detect_row, col);
 	print("\n");
 	uint8_t code = code_matrix[detect_row][col];
-	if (code & KEY_MODIFIER_BIT) {
+	if ( sys_req ) {
+		handle_sys_req(code);
+	} else if (code & KEY_MODIFIER_BIT) {
 		keyboard_modifier_keys |= modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
-	} else if ( code == KEY_SYS_REQ) {
-		dump();
+	} else if ( code == KEY_SYS_REQ ) {
+		sys_req = 1;
 	} else {
 		add_key(code);
 	}
@@ -189,6 +209,8 @@ void on_keyup(uint8_t col)
 	uint8_t code = code_matrix[detect_row][col];
 	if (code & KEY_MODIFIER_BIT) {
 		keyboard_modifier_keys &= ~ modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
+	} else if ( code == KEY_SYS_REQ ) {
+		sys_req = 0;
 	} else {
 		remove_key(code);
 	}
