@@ -167,15 +167,28 @@ uint8_t handle_program(uint8_t code)
 struct { uint8_t keyboard_modifier_keys; uint8_t keyboard_keys[MAX_KEYS]; } keyboard_log[MAX_LOG_LENGTH];
 uint8_t num_logged;
 
+void save_state(keys_state * pks)
+{
+	uint8_t i;
+	for(i=0;i<MAX_KEYS;i++) {
+		pks->keyboard_keys[i] = keyboard_keys[i];
+	}
+	pks->keyboard_modifier_keys = keyboard_modifier_keys;
+}
+void play_state(keys_state *pks)
+{
+	uint8_t j;
+	for (j=0; j<MAX_KEYS; j++) {
+		keyboard_keys[j] = pks->keyboard_keys[j];
+	}
+	keyboard_modifier_keys = pks->keyboard_modifier_keys;
+	usb_keyboard_send();
+}
+
 void log(void)
 {
 	if (num_logged < MAX_LOG_LENGTH) {
-		uint8_t i;
-		for(i=0;i<MAX_KEYS;i++) {
-			keyboard_log[num_logged].keyboard_keys[i] = keyboard_keys[i];
-		}
-		keyboard_log[num_logged].keyboard_modifier_keys = keyboard_modifier_keys;
-		num_logged++;
+		save_state(&keyboard_log[num_logged++]);
 	}
 }
 
@@ -183,12 +196,7 @@ void dump_log(void)
 {
 	uint8_t i;
 	for (i=0; i<num_logged; i++) {
-		uint8_t j;
-		for (j=0; j<MAX_KEYS; j++) {
-			keyboard_keys[j] = keyboard_log[i].keyboard_keys[j];
-		}
-		keyboard_modifier_keys = keyboard_log[i].keyboard_modifier_keys;
-		usb_keyboard_send();
+		play_state(&keyboard_log[i]);
 	}
 }
 
