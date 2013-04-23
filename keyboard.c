@@ -190,6 +190,9 @@ void log(void)
 	if (num_logged < MAX_LOG_LENGTH) {
 		save_state(&keyboard_log[num_logged++]);
 	}
+	if (active_sequence && sequence_length[active_sequence] < MAX_SEQUENCE_LENGTH) {
+		save_state(&key_sequence[active_sequence][sequence_length[active_sequence]++]);
+	}
 }
 
 void dump_log(void)
@@ -197,6 +200,14 @@ void dump_log(void)
 	uint8_t i;
 	for (i=0; i<num_logged; i++) {
 		play_state(&keyboard_log[i]);
+	}
+}
+
+void play_sequence(uint8_t n)
+{
+	uint8_t i;
+	for (i=0; i<sequence_length[n]; i++) {
+		play_state(&key_sequence[n][i]);
 	}
 }
 
