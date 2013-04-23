@@ -153,6 +153,7 @@ uint8_t handle_program(uint8_t code)
 			case KEY_8:
 			case KEY_9:
 				active_sequence = code - KEY_1 + 1;
+				sequence_length[active_sequence] = 0;
 				return 1;
 			default:
 				program = 0;
@@ -226,6 +227,21 @@ void handle_sys_req(uint8_t code)
 		case KEY_R:
 			reset_log();
 			break;
+		case KEY_1:
+		case KEY_2:
+		case KEY_3:
+		case KEY_4:
+		case KEY_5:
+		case KEY_6:
+		case KEY_7:
+		case KEY_8:
+		case KEY_9:
+			play_sequence(code - KEY_1 + 1);
+			break;
+		case KEY_P:
+			program = 1;
+			break;
+
 	}
 }
 
@@ -249,6 +265,7 @@ void on_keydown(uint8_t col)
 		keyboard_modifier_keys |= modifier_codes[code & KEY_MODIFIER_INDEX_MASK];
 	} else if ( code == KEY_SYS_REQ ) {
 		sys_req = 1;
+		active_sequence = 0;
 	} else {
 		add_key(code);
 	}
