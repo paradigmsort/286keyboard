@@ -129,7 +129,7 @@ void remove_key(uint8_t code)
 }
 
 /* Log mode. Saves all sequences sent to PC to buffer for later repeat */
-#define MAX_LOG_LENGTH 1000
+#define MAX_LOG_LENGTH 100
 struct { uint8_t keyboard_modifier_keys; uint8_t keyboard_keys[MAX_KEYS]; } keyboard_log[MAX_LOG_LENGTH];
 uint8_t num_logged;
 
