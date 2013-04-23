@@ -128,6 +128,18 @@ void remove_key(uint8_t code)
 	}
 }
 
+#define MAX_SEQUENCE_LENGTH 10
+#define NUM_SEQUENCES 10
+typedef struct {
+	uint8_t keyboard_modifier_keys;
+	uint8_t keyboard_keys[MAX_KEYS]; 
+} keys_state;
+
+keys_state key_sequence[NUM_SEQUENCES][MAX_SEQUENCE_LENGTH];
+uint8_t sequence_length[NUM_SEQUENCES];
+uint8_t active_sequence;
+uint8_t program = 0;
+
 /* Log mode. Saves all sequences sent to PC to buffer for later repeat */
 #define MAX_LOG_LENGTH 100
 struct { uint8_t keyboard_modifier_keys; uint8_t keyboard_keys[MAX_KEYS]; } keyboard_log[MAX_LOG_LENGTH];
